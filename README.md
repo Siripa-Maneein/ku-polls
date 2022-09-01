@@ -1,9 +1,12 @@
 # ku-polls
 
 ## What ku-polls does
-This is a web application for conducting online polls and surveys using django.
+An application for conducting online polls and surveys based
+on the [Django Tutorial project][django-tutorial], with
+additional features.
 
-It is part of the [Individual Software Process](https://cpske.github.io/ISP) course at [Kasetsart University](https://ku.ac.th).
+App created as part of the [Individual Software Process](
+https://cpske.github.io/ISP) course at Kasetsart University.
 
 ## How to Install and Run
 
