@@ -28,10 +28,10 @@ class DetailView(generic.DetailView):
 
     def get_queryset(self):
         """
-        Excludes any questions that aren't published yet.
+        Includes questions that can be voted only.
         """
-        published_id_list = [q.id for q in Question.objects.all() if q.can_vote()]
-        return Question.objects.filter(id__in=published_id_list)
+        can_vote_id_list = [q.id for q in Question.objects.all() if q.can_vote()]
+        return Question.objects.filter(id__in=can_vote_id_list)
 
 
 class ResultsView(generic.DetailView):
