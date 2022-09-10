@@ -28,14 +28,7 @@ class Question(models.Model):
         """Visitors can vote only if the question is published,
         and the current time is still less than or equal to the ending date or
         no ending date is set."""
-        if self.is_published():
-            if (self.end_date is None) or (timezone.now() <= self.end_date):
-                return True
-        return False
-
-
-
-
+        return self.is_published() and ((self.end_date is None) or (timezone.now() <= self.end_date))
 
 
 class Choice(models.Model):
