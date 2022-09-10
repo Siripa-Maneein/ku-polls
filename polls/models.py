@@ -20,6 +20,23 @@ class Question(models.Model):
         now = timezone.now()
         return now - datetime.timedelta(days=1) <= self.pub_date <= now
 
+    def is_published(self):
+        """Return True if the current time is more than published date."""
+        return timezone.now() >= self.pub_date
+
+    def can_vote(self):
+        """Visitors can vote only if the question is published,
+        and the current time is still less than or equal to the ending date or
+        no ending date is set."""
+        if self.is_published():
+            if (self.end_date is None) or (timezone.now() <= self.end_date):
+                return True
+        return False
+
+
+
+
+
 
 class Choice(models.Model):
     """A Choice class creates choices for Question."""
