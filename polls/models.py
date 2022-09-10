@@ -9,7 +9,7 @@ class Question(models.Model):
     """A Question class create questions with published date and end date."""
     question_text = models.CharField(max_length=200)
     pub_date = models.DateTimeField('date published')
-    end_date = models.DateTimeField('date ended')
+    end_date = models.DateTimeField('date ended', null=True)
 
     def __str__(self):
         """Showing the question text."""
