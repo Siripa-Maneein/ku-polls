@@ -16,8 +16,9 @@ class IndexView(generic.ListView):
         Return the last five published questions (not including those set to be
         published in the future).
         """
+        published_id_list = [q.id for q in Question.objects.all() if q.is_published()]
         return Question.objects.filter(
-            pub_date__lte=timezone.now()
+            id__in=published_id_list
         ).order_by('-pub_date')[:5]
 
 
@@ -29,7 +30,8 @@ class DetailView(generic.DetailView):
         """
         Excludes any questions that aren't published yet.
         """
-        return Question.objects.filter(pub_date__lte=timezone.now())
+        published_id_list = [q.id for q in Question.objects.all() if q.can_vote()]
+        return Question.objects.filter(id__in=published_id_list)
 
 
 class ResultsView(generic.DetailView):
@@ -40,7 +42,8 @@ class ResultsView(generic.DetailView):
         """
         Excludes any questions that aren't published yet.
         """
-        return Question.objects.filter(pub_date__lte=timezone.now())
+        published_id_list = [q.id for q in Question.objects.all() if q.is_published()]
+        return Question.objects.filter(id__in=published_id_list)
 
 
 def vote(request, question_id):
