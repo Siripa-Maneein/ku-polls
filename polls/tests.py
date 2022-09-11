@@ -66,7 +66,9 @@ class QuestionModelTests(TestCase):
     def test_can_vote_with_no_end_date(self):
         """Can vote question with null end date anytime after the published date."""
         published_time = timezone.now() - timezone.timedelta(days=2)
-        self.assertIs(Question(pub_date=published_time).can_vote(), True)
+        question_with_no_end_date = Question(pub_date=published_time)
+        self.assertEqual(question_with_no_end_date.end_date, None)
+        self.assertIs(question_with_no_end_date.can_vote(), True)
 
     def test_is_published(self):
         """is_published() returns True when the question is published."""
