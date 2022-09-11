@@ -1,10 +1,18 @@
-from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponseRedirect
-from django.urls import reverse
+from django.shortcuts import render, get_object_or_404, redirect
+from django.http import HttpResponseRedirect, HttpResponse
+from django.urls import reverse, path
 from django.views import generic
-from django.utils import timezone
+from django.contrib import messages
+from django.views.generic import RedirectView
+
 
 from .models import Question, Choice
+
+
+class BaseIndexView(generic.DetailView):
+    def get(self, request):
+        """When the base url is called, it will be redirect to polls index."""
+        return HttpResponseRedirect(reverse('polls:index'))
 
 
 class IndexView(generic.ListView):
@@ -58,4 +66,5 @@ def vote(request, question_id):
     else:
         selected_choice.votes += 1
         selected_choice.save()
+        messages.success(request, "Your choice successfully recorded. Thank you.")
     return HttpResponseRedirect(reverse('polls:results', args=(question.id,)))
