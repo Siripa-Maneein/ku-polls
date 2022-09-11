@@ -9,9 +9,18 @@
 {% endif %}
 
 <ul>
-{% for choice in question.choice_set.all %}
-    <li>{{ choice.choice_text }} -- {{ choice.votes }} vote{{ choice.votes|pluralize }}</li>
-{% endfor %}
+    <table>
+        <tr>
+            <th> Choices </th>
+            <th> Result </th>
+        </tr>
+    {% for choice in question.choice_set.all %}
+        <tr>
+            <td>{{ choice.choice_text }}</td>
+            <td >{{ choice.votes }}</td>
+        </tr>
+    {% endfor %}
+    </table>
 </ul>
 
 <a href="{% url 'polls:index' %}">Back to List of Polls</a>
