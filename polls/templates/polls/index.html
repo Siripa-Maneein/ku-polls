@@ -5,7 +5,11 @@
 {% if latest_question_list %}
     <ul>
     {% for question in latest_question_list %}
-        <li><a href="{% url 'polls:detail' question.id %}">{{ question.question_text }}</a></li>
+        <li>
+            <b>{{ question.question_text }}</b> &nbsp;
+            <a href="{% url 'polls:detail' question.id %}"> vote </a> &nbsp;
+            <a href="{% url 'polls:results' question.id %}"> result </a>
+        </li>
     {% endfor %}
     </ul>
 {% else %}
