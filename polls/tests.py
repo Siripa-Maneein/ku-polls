@@ -50,7 +50,7 @@ class QuestionModelTests(TestCase):
         """
         self.assertIs(self.future_question.can_vote(), False)
 
-    def test_can_vote_with_question_with_current_date_and_time_same_as_pub_date(self):
+    def test_can_vote_on_exactly_pub_date(self):
         """
         can_vote() returns True for questions whose pub_date
         is same as the current time.
@@ -58,7 +58,7 @@ class QuestionModelTests(TestCase):
         with patch.object(timezone, 'now', return_value=datetime.datetime(2022, 10, 10, 12, 20)):
             self.assertIs(Question(pub_date=timezone.now()).can_vote(), True)
 
-    def test_can_vote_on_the_end_date(self):
+    def test_can_vote_on_exactly_end_date(self):
         """can_vote() return True on the ending date."""
         with patch.object(timezone, 'now', return_value=datetime.datetime(2022, 10, 10, 12, 20)):
             published_time = timezone.now() - timezone.timedelta(days=2)
