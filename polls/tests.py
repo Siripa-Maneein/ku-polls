@@ -1,3 +1,4 @@
+"""Unit tests for polls application."""
 import datetime
 from unittest.mock import patch
 
@@ -9,8 +10,10 @@ from .models import Question
 
 
 class QuestionModelTests(TestCase):
-    """Test cases for methods in Question class in models.py"""
+    """Test cases for methods in Question."""
+
     def setUp(self):
+        """Set future and old question for repeatable uses."""
         future_time = timezone.now() + datetime.timedelta(days=30)
         self.future_question = Question(pub_date=future_time)
 
@@ -18,7 +21,8 @@ class QuestionModelTests(TestCase):
         self.old_question = Question(pub_date=old_time)
 
     def test_was_published_recently_with_future_question(self):
-        """ was_published_recently() returns False for questions whose pub_date
+        """
+        was_published_recently() returns False for questions whose pub_date
         is in the future.
         """
         self.assertIs(self.future_question.was_published_recently(), False)
@@ -31,7 +35,8 @@ class QuestionModelTests(TestCase):
         self.assertIs(self.old_question.was_published_recently(), False)
 
     def test_was_published_recently_with_recent_question(self):
-        """was_published_recently() returns True for questions whose pub_date
+        """
+        was_published_recently() returns True for questions whose pub_date
         is within the last day.
         """
         time = timezone.now() - datetime.timedelta(hours=23, minutes=59, seconds=59)
@@ -39,13 +44,15 @@ class QuestionModelTests(TestCase):
         self.assertIs(recent_question.was_published_recently(), True)
 
     def test_can_vote_with_future_published_question(self):
-        """can_vote() returns False for questions whose pub_date
+        """
+        can_vote() returns False for questions whose pub_date
         is in the future.
         """
         self.assertIs(self.future_question.can_vote(), False)
 
     def test_can_vote_with_question_with_current_date_and_time_same_as_pub_date(self):
-        """can_vote() returns True for questions whose pub_date
+        """
+        can_vote() returns True for questions whose pub_date
         is same as the current time.
         """
         with patch.object(timezone, 'now', return_value=datetime.datetime(2022, 10, 10, 12, 20)):
@@ -55,7 +62,9 @@ class QuestionModelTests(TestCase):
         """can_vote() return True on the ending date."""
         with patch.object(timezone, 'now', return_value=datetime.datetime(2022, 10, 10, 12, 20)):
             published_time = timezone.now() - timezone.timedelta(days=2)
-            self.assertIs(Question(pub_date=published_time, end_date=timezone.now()).can_vote(), True)
+            self.assertIs(Question(pub_date=published_time,
+                                   end_date=timezone.now()).can_vote()
+                          , True)
 
     def test_can_vote_with_current_time_after_end_date(self):
         """can_vote() returns False if current time passing the end date."""
@@ -88,6 +97,7 @@ def create_question(question_text, days):
 
 
 class QuestionIndexViewTests(TestCase):
+    """Test cases for index view of the app."""
     def test_no_questions(self):
         """
         If no questions exist, an appropriate message is displayed.
@@ -99,8 +109,7 @@ class QuestionIndexViewTests(TestCase):
 
     def test_past_question(self):
         """
-        Questions with a pub_date in the past are displayed on the
-        index page.
+        Questions with a pub_date in the past are displayed on the index page.
         """
         question = create_question(question_text="Past question.", days=-30)
         response = self.client.get(reverse('polls:index'))
@@ -146,6 +155,8 @@ class QuestionIndexViewTests(TestCase):
 
 
 class QuestionDetailViewTests(TestCase):
+    """Test cases for detail view of the app."""
+
     def test_future_question(self):
         """
         The detail view of a question with a pub_date in the future
@@ -168,16 +179,20 @@ class QuestionDetailViewTests(TestCase):
         self.assertContains(response, past_question.question_text)
 
     def test_not_existing_question(self):
-        """The detail view of a question that does not exist
-        returns a 302 redirecting to index page."""
+        """
+        The detail view of a question that does not exist
+        returns a 302 redirecting to index page.
+        """
         url = reverse('polls:detail', args=(100,))
         response = self.client.get(url)
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.url, reverse('polls:index'))
 
     def test_passing_end_date_question(self):
-        """The detail view of a question that the end date has passed
-        returns a 302 redirecting to index page."""
+        """
+        The detail view of a question that the end date has passed
+        returns a 302 redirecting to index page.
+        """
         pub_date = timezone.now() - datetime.timedelta(days=2)
         end_date = timezone.now() - datetime.timedelta(days=1)
         question = Question.objects.create(question_text="What's up",
@@ -190,6 +205,8 @@ class QuestionDetailViewTests(TestCase):
 
 
 class QuestionResultViewTests(TestCase):
+    """Test cases for result view of the app."""
+
     def test_future_question(self):
         """
         The result view of a question with a pub_date in the future

@@ -1,22 +1,24 @@
-from django.shortcuts import render, get_object_or_404, redirect
-from django.http import HttpResponseRedirect, HttpResponse
-from django.urls import reverse, path
+"""Contains views of the polls application."""
+from django.shortcuts import render, get_object_or_404
+from django.http import HttpResponseRedirect
+from django.urls import reverse
 from django.views import generic
 from django.contrib import messages
-from django.http import Http404
-from django.views.generic import RedirectView
 
 
 from .models import Question, Choice
 
 
 class BaseIndexView(generic.DetailView):
+    """A base view."""
+
     def get(self, request, *args, **kwargs):
         """When the base url is called, it will be redirect to polls index."""
         return HttpResponseRedirect(reverse('polls:index'))
 
 
 class IndexView(generic.ListView):
+    """An index view."""
     template_name = 'polls/index.html'
     context_object_name = 'latest_question_list'
 
@@ -32,6 +34,7 @@ class IndexView(generic.ListView):
 
 
 def detail(request, pk):
+    """A detail view."""
     try:
         question = Question.objects.get(pk=pk)
         if not question.can_vote():
@@ -46,6 +49,7 @@ def detail(request, pk):
 
 
 class ResultsView(generic.DetailView):
+    """A result view."""
     model = Question
     template_name = 'polls/results.html'
 
@@ -58,6 +62,7 @@ class ResultsView(generic.DetailView):
 
 
 def vote(request, question_id):
+    """A vote view."""
     question = get_object_or_404(Question, pk=question_id)
     try:
         selected_choice = question.choice_set.get(pk=request.POST['choice'])
