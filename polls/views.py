@@ -74,5 +74,5 @@ def vote(request, question_id):
     else:
         selected_choice.votes += 1
         selected_choice.save()
-        messages.success(request, "✅ Your choice successfully recorded. Thank you.")
+        messages.success(request, "✅ Your choice was successfully recorded. Thank you.")
     return HttpResponseRedirect(reverse('polls:results', args=(question.id,)))
