@@ -2,11 +2,34 @@
 
 <link rel="stylesheet" href="{% static 'polls/style.css' %}">
 
+<br>
+{% if messages %}
+<ul class="error_messages">
+  {% for msg in messages %}
+    <p class="{{msg.tags}}">{{ msg }}</p>
+  {% endfor %}
+</ul>
+{% endif %}
+
 {% if latest_question_list %}
     <ul>
+        <table>
     {% for question in latest_question_list %}
-        <li><a href="{% url 'polls:detail' question.id %}">{{ question.question_text }}</a></li>
+            {% if question.can_vote %}
+            <tr>
+                <td> <b> {{ question.question_text }} </b> </td>
+                <td><a href="{% url 'polls:detail' question.id %}"> vote </a></td>
+                <td><a href="{% url 'polls:results' question.id %}"> results </a></td>
+            </tr>
+            {% else %}
+            <tr>
+                <td> <b> {{ question.question_text }}  </b> </td>
+                <td> &nbsp; </td>
+                <td><a href="{% url 'polls:results' question.id %}"> results </a></td>
+            </tr>
+            {% endif %}
     {% endfor %}
+        </table>
     </ul>
 {% else %}
     <p>No polls are available.</p>

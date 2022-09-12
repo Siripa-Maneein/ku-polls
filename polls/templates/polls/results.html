@@ -1,9 +1,31 @@
-<h1>{{ question.question_text }}</h1>
+{% load static %}
 
-<ul>
-{% for choice in question.choice_set.all %}
-    <li>{{ choice.choice_text }} -- {{ choice.votes }} vote{{ choice.votes|pluralize }}</li>
-{% endfor %}
-</ul>
+<link rel="stylesheet" href="{% static 'polls/style.css' %}">
 
-<a href="{% url 'polls:detail' question.id %}">Vote again?</a>
+<fieldset>
+    <legend> <h2>{{ question.question_text }}</h2> </legend>
+    {% if messages %}
+    <ul class="success_messages">
+      {% for msg in messages %}
+        <label class="{{msg.tags}}">{{ msg }}</label>
+      {% endfor %}
+    </ul>
+    {% endif %}
+
+    <ul>
+        <table>
+            <tr>
+                <th> Choices </th>
+                <th> #votes </th>
+            </tr>
+        {% for choice in question.choice_set.all %}
+            <tr>
+                <td>{{ choice.choice_text }}</td>
+                <td >{{ choice.votes }}</td>
+            </tr>
+        {% endfor %}
+        </table>
+    </ul>
+</fieldset>
+
+<a href="{% url 'polls:index' %}">Back to List of Polls</a>
