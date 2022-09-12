@@ -19,13 +19,13 @@
             <tr>
                 <td> <b> {{ question.question_text }} </b> </td>
                 <td><a href="{% url 'polls:detail' question.id %}"> vote </a></td>
-                <td><a href="{% url 'polls:results' question.id %}"> result </a></td>
+                <td><a href="{% url 'polls:results' question.id %}"> results </a></td>
             </tr>
             {% else %}
             <tr>
                 <td> <b> {{ question.question_text }}  </b> </td>
                 <td> &nbsp; </td>
-                <td><a href="{% url 'polls:results' question.id %}"> result </a></td>
+                <td><a href="{% url 'polls:results' question.id %}"> results </a></td>
             </tr>
             {% endif %}
     {% endfor %}
