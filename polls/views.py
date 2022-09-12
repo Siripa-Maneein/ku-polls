@@ -41,7 +41,7 @@ def detail(request, pk):
             'question': question
         })
     except Question.DoesNotExist:
-        messages.error(request, "The question you're looking for does not existed.")
+        messages.error(request, "The question you're looking for does not exist.")
         return HttpResponseRedirect(reverse('polls:index'))
 
 
