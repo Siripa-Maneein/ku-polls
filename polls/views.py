@@ -10,7 +10,7 @@ from .models import Question, Choice
 
 
 class BaseIndexView(generic.DetailView):
-    """A base view."""
+    """A class representing a view for base url."""
 
     def get(self, request, *args, **kwargs):
         """When the base url is called, it will be redirect to polls index."""
@@ -18,7 +18,7 @@ class BaseIndexView(generic.DetailView):
 
 
 class IndexView(generic.ListView):
-    """An index view."""
+    """A class representing an index view."""
 
     template_name = 'polls/index.html'
     context_object_name = 'latest_question_list'
@@ -50,7 +50,7 @@ def detail(request, pk):
 
 
 class ResultsView(generic.DetailView):
-    """A result view."""
+    """A class representing a result view."""
 
     model = Question
     template_name = 'polls/results.html'
