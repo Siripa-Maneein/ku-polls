@@ -19,13 +19,14 @@ class BaseIndexView(generic.DetailView):
 
 class IndexView(generic.ListView):
     """An index view."""
+
     template_name = 'polls/index.html'
     context_object_name = 'latest_question_list'
 
     def get_queryset(self):
-        """
-        Return the last five published questions (not including those set to be
-        published in the future).
+        """Return the last five published questions.
+
+        Those set to be published in the future will not be included.
         """
         published_id_list = [q.id for q in Question.objects.all() if q.is_published()]
         return Question.objects.filter(
@@ -34,7 +35,7 @@ class IndexView(generic.ListView):
 
 
 def detail(request, pk):
-    """A detail view."""
+    """Return correct response to detail view request."""
     try:
         question = Question.objects.get(pk=pk)
         if not question.can_vote():
@@ -50,19 +51,18 @@ def detail(request, pk):
 
 class ResultsView(generic.DetailView):
     """A result view."""
+
     model = Question
     template_name = 'polls/results.html'
 
     def get_queryset(self):
-        """
-        Excludes any questions that aren't published yet.
-        """
+        """Excludes any questions that aren't published yet."""
         published_id_list = [q.id for q in Question.objects.all() if q.is_published()]
         return Question.objects.filter(id__in=published_id_list)
 
 
 def vote(request, question_id):
-    """A vote view."""
+    """Return correct response to vote view request."""
     question = get_object_or_404(Question, pk=question_id)
     try:
         selected_choice = question.choice_set.get(pk=request.POST['choice'])
