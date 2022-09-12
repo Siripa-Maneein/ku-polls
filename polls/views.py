@@ -39,13 +39,13 @@ def detail(request, pk):
     try:
         question = Question.objects.get(pk=pk)
         if not question.can_vote():
-            messages.error(request, "Voting is not allowed for this question.")
+            messages.error(request, "‼️ Voting is not allowed for this question.")
             return HttpResponseRedirect(reverse('polls:index'))
         return render(request, 'polls/detail.html', {
             'question': question
         })
     except Question.DoesNotExist:
-        messages.error(request, "The question you're looking for does not exist.")
+        messages.error(request, "‼️ The question you're looking for does not exist.")
         return HttpResponseRedirect(reverse('polls:index'))
 
 
@@ -67,12 +67,12 @@ def vote(request, question_id):
     try:
         selected_choice = question.choice_set.get(pk=request.POST['choice'])
     except (KeyError, Choice.DoesNotExist):
+        messages.success(request, "‼️ You didn't select a choice.")
         return render(request, 'polls/detail.html', {
             'question': question,
-            'error_message': "You didn't select a choice,",
         })
     else:
         selected_choice.votes += 1
         selected_choice.save()
-        messages.success(request, "Your choice successfully recorded. Thank you.")
+        messages.success(request, "✅ Your choice successfully recorded. Thank you.")
     return HttpResponseRedirect(reverse('polls:results', args=(question.id,)))

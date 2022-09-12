@@ -2,8 +2,9 @@
 
 <link rel="stylesheet" href="{% static 'polls/style.css' %}">
 
+<br>
 {% if messages %}
-<ul class="messages">
+<ul class="error_messages">
   {% for msg in messages %}
     <p class="{{msg.tags}}">{{ msg }}</p>
   {% endfor %}
@@ -16,13 +17,13 @@
     {% for question in latest_question_list %}
             {% if question.can_vote %}
             <tr>
-                <td>{{ question.question_text }}</td>
+                <td> <b> {{ question.question_text }} </b> </td>
                 <td><a href="{% url 'polls:detail' question.id %}"> vote </a></td>
                 <td><a href="{% url 'polls:results' question.id %}"> result </a></td>
             </tr>
             {% else %}
             <tr>
-                <td>{{ question.question_text }}</td>
+                <td> <b> {{ question.question_text }}  </b> </td>
                 <td> &nbsp; </td>
                 <td><a href="{% url 'polls:results' question.id %}"> result </a></td>
             </tr>

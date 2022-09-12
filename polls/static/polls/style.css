@@ -1,7 +1,12 @@
-li a {
-    color: green;
+body {
+    background: white url("images/bg.jpg") no-repeat;
+    background-size: cover;
 }
 
-body {
-    background: white url("images/background.jpg") no-repeat;
+ul.error_messages {
+    color : red;
+}
+
+ul.success_messages{
+    color : green;
 }
