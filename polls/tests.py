@@ -1,5 +1,4 @@
 import datetime
-from datetime import date
 from unittest.mock import patch
 
 from django.test import TestCase
@@ -150,12 +149,13 @@ class QuestionDetailViewTests(TestCase):
     def test_future_question(self):
         """
         The detail view of a question with a pub_date in the future
-        returns a 404 not found.
+        returns a 302 redirecting to index page.
         """
         future_question = create_question(question_text='Future question.', days=5)
         url = reverse('polls:detail', args=(future_question.id,))
         response = self.client.get(url)
-        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, reverse('polls:index'))
 
     def test_past_question(self):
         """
@@ -166,6 +166,27 @@ class QuestionDetailViewTests(TestCase):
         url = reverse('polls:detail', args=(past_question.id,))
         response = self.client.get(url)
         self.assertContains(response, past_question.question_text)
+
+    def test_not_existing_question(self):
+        """The detail view of a question that does not exist
+        returns a 302 redirecting to index page."""
+        url = reverse('polls:detail', args=(100,))
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, reverse('polls:index'))
+
+    def test_passing_end_date_question(self):
+        """The detail view of a question that the end date has passed
+        returns a 302 redirecting to index page."""
+        pub_date = timezone.now() - datetime.timedelta(days=2)
+        end_date = timezone.now() - datetime.timedelta(days=1)
+        question = Question.objects.create(question_text="What's up",
+                                           pub_date=pub_date,
+                                           end_date=end_date)
+        url = reverse('polls:detail', args=(question.id, ))
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, reverse('polls:index'))
 
 
 class QuestionResultViewTests(TestCase):
