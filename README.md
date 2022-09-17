@@ -10,7 +10,27 @@ https://cpske.github.io/ISP) course at Kasetsart University.
 
 ## How to Install and Run
 
-To be added.
+1. Clone this repository
+```
+git clone https://github.com/Siripa-Maneein/ku-polls.git
+```
+
+2. Install items in requirement.txt
+```
+pip install -r requirement.txt
+```
+
+3. Follow the instructions in sample.env
+
+4. Run the below command in your cloned directory
+```
+python manage.py runserver
+```
+
+5. Visit the following url
+```
+http://localhost:8000/polls/
+```
 
 ## Project Documents
 
