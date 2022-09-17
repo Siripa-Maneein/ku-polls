@@ -42,6 +42,7 @@ class Question(models.Model):
         for choice in self.choice_set.all():
             if Vote.objects.filter(choice=choice, user=user).exists():
                 return choice
+        return None
 
 
 class Choice(models.Model):

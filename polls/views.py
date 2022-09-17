@@ -47,7 +47,8 @@ class DetailView(LoginRequiredMixin, generic.DetailView):
                 messages.error(request, "‼️ Voting is not allowed for this question.")
                 return HttpResponseRedirect(reverse('polls:index'))
             return render(request, 'polls/detail.html', {
-                'question': question
+                'question': question,
+                'voted_choice': question.get_voted_choice(request.user)
             })
         except Question.DoesNotExist:
             messages.error(request, "‼️ The question you're looking for does not exist.")
@@ -76,6 +77,7 @@ def vote(request, question_id):
         messages.error(request, "‼️ You didn't select a choice.")
         return render(request, 'polls/detail.html', {
             'question': question,
+            'voted_choice': question.get_voted_choice(request.user)
         })
     else:
         # user already vote this choice
@@ -84,6 +86,7 @@ def vote(request, question_id):
                            f"‼️ You have already voted this choice.")
             return render(request, 'polls/detail.html', {
                 'question': question,
+                'voted_choice': question.get_voted_choice(request.user)
             })
         # user change choice from the same question
         elif Vote.objects.filter(user=request.user, choice__question=question).exists():

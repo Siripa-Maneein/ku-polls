@@ -14,8 +14,13 @@
     </ul>
     {% endif %}
     {% for choice in question.choice_set.all %}
-        <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}">
-        <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br>
+        {% if voted_choice == choice %}
+            <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}" checked>
+            <label for="choice{{ forloop.counter }}">{{ choice.choice_text }} -->your previous selection</label><br>
+        {% else %}
+            <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}">
+            <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br>
+        {% endif %}
     {% endfor %}
 </fieldset>
 <input type="submit" value="Vote">
