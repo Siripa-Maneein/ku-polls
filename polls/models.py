@@ -3,6 +3,7 @@ import datetime
 
 from django.db import models
 from django.utils import timezone
+from django.contrib.auth.models import User
 
 
 class Question(models.Model):
@@ -36,6 +37,12 @@ class Question(models.Model):
         return self.is_published() and ((self.end_date is None)
                                         or (timezone.now() <= self.end_date))
 
+    def get_voted_choice(self, user):
+        """Get the choice that is already voted."""
+        for choice in self.choice_set.all():
+            if Vote.objects.filter(choice=choice, user=user).exists():
+                return choice
+
 
 class Choice(models.Model):
     """A Choice class creates choices for Question."""
@@ -47,3 +54,19 @@ class Choice(models.Model):
     def __str__(self):
         """Show the choice text."""
         return self.choice_text
+
+    @property
+    def vote(self):
+        """Count the number of votes for this choice."""
+        return Vote.objects.filter(choice=self).count()
+
+
+class Vote(models.Model):
+    """A vote by a user for a question."""
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    choice = models.ForeignKey(Choice, on_delete=models.CASCADE)
+
+    @property
+    def question(self):
+        return self.choice.question
+

@@ -7,7 +7,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from .models import Question, Choice
+from .models import Question, Choice, Vote
 
 
 class BaseIndexView(generic.DetailView):
@@ -73,12 +73,32 @@ def vote(request, question_id):
     try:
         selected_choice = question.choice_set.get(pk=request.POST['choice'])
     except (KeyError, Choice.DoesNotExist):
-        messages.success(request, "‼️ You didn't select a choice.")
+        messages.error(request, "‼️ You didn't select a choice.")
         return render(request, 'polls/detail.html', {
             'question': question,
         })
     else:
+        # user already vote this choice
+        if Vote.objects.filter(choice=selected_choice, user=request.user).exists():
+            messages.error(request,
+                           f"‼️ You have already voted this choice.")
+            return render(request, 'polls/detail.html', {
+                'question': question,
+            })
+        # user change choice from the same question
+        elif Vote.objects.filter(user=request.user, choice__question=question).exists():
+            old_choice = question.get_voted_choice(request.user)
+            # delete old vote
+            old_choice.vote_set.filter(user=request.user).delete()
+            old_choice.votes -= 1
+            old_choice.save()
+            messages.success(request, f"✅ Your choice was successfully changed from "
+                                      f"'{old_choice.choice_text}' to '{selected_choice.choice_text}'.")
+        # the question has never been voted by the user before
+        else:
+            messages.success(request, "✅ Your choice was successfully recorded. Thank you.")
+        # create new vote and update number of votes for selected choice
+        Vote.objects.create(user=request.user, choice=selected_choice)
         selected_choice.votes += 1
         selected_choice.save()
-        messages.success(request, "✅ Your choice was successfully recorded. Thank you.")
     return HttpResponseRedirect(reverse('polls:results', args=(question.id,)))
