@@ -32,6 +32,12 @@ python manage.py runserver
 http://localhost:8000/polls/
 ```
 
+## Demo Users
+| Username  | Password  |
+|-----------|-----------|
+|   harry   | hackme22 |
+|   jerry   | tomnjerry22 |
+
 ## Project Documents
 
 All project documents are in the [Project Wiki](../../wiki/Home)
