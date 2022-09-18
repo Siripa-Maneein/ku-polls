@@ -2,6 +2,9 @@
 
 <link rel="stylesheet" href="{% static 'polls/style.css' %}">
 
+<a href="{% url 'login'%}?next={{request.path}}">Login</a>
+<a href="{% url 'logout'%}">Logout</a>
+
 <form action="{% url 'polls:vote' question.id %}" method="post">
 {% csrf_token %}
 <fieldset>
