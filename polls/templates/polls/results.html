@@ -2,8 +2,6 @@
 
 <link rel="stylesheet" href="{% static 'polls/style.css' %}">
 
-<a href="{% url 'login'%}?next={{request.path}}">Login</a>
-<a href="{% url 'logout'%}">Logout</a>
 
 <fieldset>
     <legend> <h2>{{ question.question_text }}</h2> </legend>

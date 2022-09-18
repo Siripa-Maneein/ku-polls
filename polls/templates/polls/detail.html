@@ -2,8 +2,15 @@
 
 <link rel="stylesheet" href="{% static 'polls/style.css' %}">
 
-<a href="{% url 'login'%}?next={{request.path}}">Login</a>
-<a href="{% url 'logout'%}">Logout</a>
+{% if user.is_authenticated%}
+    {% if voted_choice == None%}
+        Welcome, {{ user.username }}.
+    {%else%}
+        Welcome back, {{ user.username }}.
+    {% endif %}
+{% else %}
+   Please <a href="{% url 'login' %}?next={{request.path}}">Login</a>
+{% endif %}
 
 <form action="{% url 'polls:vote' question.id %}" method="post">
 {% csrf_token %}

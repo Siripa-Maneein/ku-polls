@@ -51,7 +51,6 @@ class DetailView(generic.DetailView):
                     'voted_choice': question.get_voted_choice(request.user)
                 })
             else:
-                messages.error(request, "🔒️ You haven't logged in. Please log in to vote.")
                 return render(request, 'polls/detail.html', {
                     'question': question,
                 })
@@ -85,7 +84,6 @@ def vote(request, question_id):
             'voted_choice': question.get_voted_choice(request.user)
         })
     except KeyError:
-        messages.success(request, "🔑 You're logged in and able to vote.")
         return render(request, 'polls/detail.html', {
             'question': question,
             'voted_choice': question.get_voted_choice(request.user)
