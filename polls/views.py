@@ -4,9 +4,10 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.views import generic
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 
 
-from .models import Question, Choice
+from .models import Question, Choice, Vote
 
 
 class BaseIndexView(generic.DetailView):
@@ -34,19 +35,29 @@ class IndexView(generic.ListView):
         ).order_by('-pub_date')[:5]
 
 
-def detail(request, pk):
-    """Return correct response to detail view request."""
-    try:
-        question = Question.objects.get(pk=pk)
-        if not question.can_vote():
-            messages.error(request, "‼️ Voting is not allowed for this question.")
+class DetailView(generic.DetailView):
+    """A class for detail view of a poll."""
+    model = Question
+    template_name = 'polls/detail.html'
+
+    def get(self, request, *args, **kwargs):
+        try:
+            question = Question.objects.get(pk=self.kwargs['pk'])
+            if not question.can_vote():
+                messages.error(request, "‼️ Voting is not allowed for this question.")
+                return HttpResponseRedirect(reverse('polls:index'))
+            if request.user.is_authenticated:
+                return render(request, 'polls/detail.html', {
+                    'question': question,
+                    'voted_choice': question.get_voted_choice(request.user)
+                })
+            else:
+                return render(request, 'polls/detail.html', {
+                    'question': question,
+                })
+        except Question.DoesNotExist:
+            messages.error(request, "‼️ The question you're looking for does not exist.")
             return HttpResponseRedirect(reverse('polls:index'))
-        return render(request, 'polls/detail.html', {
-            'question': question
-        })
-    except Question.DoesNotExist:
-        messages.error(request, "‼️ The question you're looking for does not exist.")
-        return HttpResponseRedirect(reverse('polls:index'))
 
 
 class ResultsView(generic.DetailView):
@@ -61,18 +72,43 @@ class ResultsView(generic.DetailView):
         return Question.objects.filter(id__in=published_id_list)
 
 
+@login_required
 def vote(request, question_id):
     """Return correct response to vote view request."""
+    user = request.user
     question = get_object_or_404(Question, pk=question_id)
     try:
         selected_choice = question.choice_set.get(pk=request.POST['choice'])
     except (KeyError, Choice.DoesNotExist):
-        messages.success(request, "‼️ You didn't select a choice.")
+        if not KeyError:
+            messages.error(request, "‼️ You didn't select a choice.")
         return render(request, 'polls/detail.html', {
             'question': question,
+            'voted_choice': question.get_voted_choice(user)
         })
     else:
+        # user already vote this choice
+        if Vote.objects.filter(choice=selected_choice, user=user).exists():
+            messages.error(request,
+                           f"‼️ You have already voted this choice.")
+            return render(request, 'polls/detail.html', {
+                'question': question,
+                'voted_choice': question.get_voted_choice(user)
+            })
+        # user change choice from the same question
+        elif Vote.objects.filter(user=user, choice__question=question).exists():
+            old_choice = question.get_voted_choice(user)
+            # delete old vote
+            old_choice.vote_set.filter(user=user).delete()
+            old_choice.votes -= 1
+            old_choice.save()
+            messages.success(request, f"✅ Your choice was successfully changed from "
+                                      f"'{old_choice.choice_text}' to '{selected_choice.choice_text}'.")
+        # the question has never been voted by the user before
+        else:
+            messages.success(request, "✅ Your choice was successfully recorded. Thank you.")
+        # create new vote and update number of votes for selected choice
+        Vote.objects.create(user=user, choice=selected_choice)
         selected_choice.votes += 1
         selected_choice.save()
-        messages.success(request, "✅ Your choice was successfully recorded. Thank you.")
     return HttpResponseRedirect(reverse('polls:results', args=(question.id,)))

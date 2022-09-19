@@ -2,10 +2,11 @@
 
 <link rel="stylesheet" href="{% static 'polls/style.css' %}">
 
+
 <fieldset>
     <legend> <h2>{{ question.question_text }}</h2> </legend>
     {% if messages %}
-    <ul class="success_messages">
+    <ul class="success_messages" style="list-style-type:none">
       {% for msg in messages %}
         <label class="{{msg.tags}}">{{ msg }}</label>
       {% endfor %}
