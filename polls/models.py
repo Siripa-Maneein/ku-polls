@@ -66,8 +66,3 @@ class Vote(models.Model):
     """A vote by a user for a question."""
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     choice = models.ForeignKey(Choice, on_delete=models.CASCADE)
-
-    @property
-    def question(self):
-        return self.choice.question
-

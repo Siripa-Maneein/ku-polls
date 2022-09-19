@@ -1,4 +1,16 @@
-<html>
+{% load static %}
+
+<link rel="stylesheet" href="{% static 'polls/style.css' %}">
+
+
+{% if messages %}
+<ul class="error_messages" style="list-style-type:none">
+  {% for msg in messages %}
+     <li class="{{msg.tags}}">{{ msg }}</li>
+  {% endfor %}
+</ul>
+{% endif %}
+
 <body>
 <h2>Login</h2>
 <form method="post">
@@ -14,6 +26,5 @@
 <a href="{% url 'password_reset' %}">Forgot password?</a>
 </p>
 </body>
-</html>
 
 <a href="{% url 'polls:index' %}"> Continue without login </a>

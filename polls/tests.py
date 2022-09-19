@@ -4,11 +4,9 @@ from unittest.mock import patch
 
 from django.test import TestCase
 from django.utils import timezone
-from django.urls import reverse
 import django.test
 from django.urls import reverse
 from django.contrib.auth.models import User
-from django.contrib.auth import authenticate # to "login" a user using code
 from .models import Question, Choice
 
 
@@ -232,6 +230,7 @@ class QuestionResultViewTests(TestCase):
 
 
 class UserAuthTest(django.test.TestCase):
+    """Test cases for authentication."""
 
     def setUp(self):
         # superclass setUp creates a Client object and initializes test database

@@ -6,6 +6,7 @@ from django.views import generic
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
+
 from .models import Question, Choice, Vote
 
 
@@ -74,34 +75,31 @@ class ResultsView(generic.DetailView):
 @login_required
 def vote(request, question_id):
     """Return correct response to vote view request."""
+    user = request.user
     question = get_object_or_404(Question, pk=question_id)
     try:
         selected_choice = question.choice_set.get(pk=request.POST['choice'])
-    except Choice.DoesNotExist:
-        messages.error(request, "‼️ You didn't select a choice.")
+    except (KeyError, Choice.DoesNotExist):
+        if not KeyError:
+            messages.error(request, "‼️ You didn't select a choice.")
         return render(request, 'polls/detail.html', {
             'question': question,
-            'voted_choice': question.get_voted_choice(request.user)
-        })
-    except KeyError:
-        return render(request, 'polls/detail.html', {
-            'question': question,
-            'voted_choice': question.get_voted_choice(request.user)
+            'voted_choice': question.get_voted_choice(user)
         })
     else:
         # user already vote this choice
-        if Vote.objects.filter(choice=selected_choice, user=request.user).exists():
+        if Vote.objects.filter(choice=selected_choice, user=user).exists():
             messages.error(request,
                            f"‼️ You have already voted this choice.")
             return render(request, 'polls/detail.html', {
                 'question': question,
-                'voted_choice': question.get_voted_choice(request.user)
+                'voted_choice': question.get_voted_choice(user)
             })
         # user change choice from the same question
-        elif Vote.objects.filter(user=request.user, choice__question=question).exists():
-            old_choice = question.get_voted_choice(request.user)
+        elif Vote.objects.filter(user=user, choice__question=question).exists():
+            old_choice = question.get_voted_choice(user)
             # delete old vote
-            old_choice.vote_set.filter(user=request.user).delete()
+            old_choice.vote_set.filter(user=user).delete()
             old_choice.votes -= 1
             old_choice.save()
             messages.success(request, f"✅ Your choice was successfully changed from "
@@ -110,7 +108,7 @@ def vote(request, question_id):
         else:
             messages.success(request, "✅ Your choice was successfully recorded. Thank you.")
         # create new vote and update number of votes for selected choice
-        Vote.objects.create(user=request.user, choice=selected_choice)
+        Vote.objects.create(user=user, choice=selected_choice)
         selected_choice.votes += 1
         selected_choice.save()
     return HttpResponseRedirect(reverse('polls:results', args=(question.id,)))
