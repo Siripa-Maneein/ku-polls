@@ -9,7 +9,7 @@
         Welcome back, {{ user.username }}.
     {% endif %}
 {% else %}
-   Please <a href="{% url 'login' %}?next={{request.path}}">Login</a>
+   Please, <a href="{% url 'login' %}?next={{request.path}}">login </a> to vote.
 {% endif %}
 
 <form action="{% url 'polls:vote' question.id %}" method="post">
