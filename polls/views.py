@@ -98,9 +98,7 @@ def vote(request, question_id):
         # user change choice from the same question
         elif Vote.objects.filter(user=user, choice__question=question).exists():
             old_choice = question.get_voted_choice(user)
-            # delete old vote
             old_choice.vote_set.filter(user=user).delete()
-            old_choice.votes -= 1
             old_choice.save()
             messages.success(request, f"✅ Your choice was successfully changed from "
                                       f"'{old_choice.choice_text}' to '{selected_choice.choice_text}'.")
@@ -109,6 +107,5 @@ def vote(request, question_id):
             messages.success(request, "✅ Your choice was successfully recorded. Thank you.")
         # create new vote and update number of votes for selected choice
         Vote.objects.create(user=user, choice=selected_choice)
-        selected_choice.votes += 1
         selected_choice.save()
     return HttpResponseRedirect(reverse('polls:results', args=(question.id,)))
