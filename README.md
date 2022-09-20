@@ -15,9 +15,9 @@ https://cpske.github.io/ISP) course at Kasetsart University.
 git clone https://github.com/Siripa-Maneein/ku-polls.git
 ```
 
-2. Install items in requirement.txt
+2. Install items in requirements.txt
 ```
-pip install -r requirement.txt
+pip install -r requirements.txt
 ```
 
 3. Follow the instructions in sample.env
