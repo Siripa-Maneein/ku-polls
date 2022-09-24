@@ -89,8 +89,7 @@ def vote(request, question_id):
     else:
         # user already vote this choice
         if Vote.objects.filter(choice=selected_choice, user=user).exists():
-            messages.error(request,
-                           f"‼️ You have already voted this choice.")
+            messages.error(request, "‼️ You have already voted this choice.")
             return render(request, 'polls/detail.html', {
                 'question': question,
                 'voted_choice': question.get_voted_choice(user)
@@ -101,7 +100,8 @@ def vote(request, question_id):
             old_choice.vote_set.filter(user=user).delete()
             old_choice.save()
             messages.success(request, f"✅ Your choice was successfully changed from "
-                                      f"'{old_choice.choice_text}' to '{selected_choice.choice_text}'.")
+                                      f"'{old_choice.choice_text}' "
+                                      f"to '{selected_choice.choice_text}'.")
         # the question has never been voted by the user before
         else:
             messages.success(request, "✅ Your choice was successfully recorded. Thank you.")

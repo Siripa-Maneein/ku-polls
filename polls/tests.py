@@ -63,9 +63,8 @@ class QuestionModelTests(TestCase):
         """can_vote() return True on the ending date."""
         with patch.object(timezone, 'now', return_value=datetime.datetime(2022, 10, 10, 12, 20)):
             published_time = timezone.now() - timezone.timedelta(days=2)
-            self.assertIs(Question(pub_date=published_time,
-                                   end_date=timezone.now()).can_vote()
-                          , True)
+            question = Question(pub_date=published_time, end_date=timezone.now())
+            self.assertIs(question.can_vote(), True)
 
     def test_can_vote_with_current_time_after_end_date(self):
         """can_vote() returns False if current time passing the end date."""

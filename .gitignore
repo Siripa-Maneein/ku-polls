@@ -9,7 +9,8 @@ __pycache__/
 # Distribution / packaging
 .Python
 build/
-develop-eggs/
+develop-eggs/cd ../
+
 dist/
 downloads/
 eggs/
@@ -58,8 +59,8 @@ coverage.xml
 # Django stuff:
 *.log
 local_settings.py
-#db.sqlite3
-#db.sqlite3-journal
+db.sqlite3
+db.sqlite3-journal
 
 # Flask stuff:
 instance/
@@ -89,7 +90,7 @@ ipython_config.py
 #   However, in case of collaboration, if having platform-specific dependencies or dependencies
 #   having no cross-platform support, pipenv may install dependencies that don't work, or not
 #   install all needed dependencies.
-#Pipfile.lock
+# Pipfile.lock
 
 # PEP 582; used by e.g. github.com/David-OConnor/pyflow
 __pypackages__/
