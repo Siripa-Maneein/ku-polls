@@ -1,0 +1,262 @@
+[
+{
+  "model": "polls.question",
+  "pk": 2,
+  "fields": {
+    "question_text": "What type of transportation would you prefer the most for traveling within Kasetsart university?",
+    "pub_date": "2022-09-05T06:29:56Z",
+    "end_date": null
+  }
+},
+{
+  "model": "polls.question",
+  "pk": 3,
+  "fields": {
+    "question_text": "Which brand of smartphones do you trust the most?",
+    "pub_date": "2022-09-05T06:30:07Z",
+    "end_date": null
+  }
+},
+{
+  "model": "polls.question",
+  "pk": 4,
+  "fields": {
+    "question_text": "What's your favorite Thai newspaper?",
+    "pub_date": "2022-09-17T19:35:18Z",
+    "end_date": "2022-09-19T17:00:00Z"
+  }
+},
+{
+  "model": "polls.question",
+  "pk": 5,
+  "fields": {
+    "question_text": "How much did you spend on food on 10 September 2022?",
+    "pub_date": "2022-09-09T17:00:00Z",
+    "end_date": "2022-09-10T16:59:59Z"
+  }
+},
+{
+  "model": "polls.choice",
+  "pk": 4,
+  "fields": {
+    "question": 2,
+    "choice_text": "Talai Bus (shuttle bus)"
+  }
+},
+{
+  "model": "polls.choice",
+  "pk": 5,
+  "fields": {
+    "question": 2,
+    "choice_text": "Motorcycle Taxi"
+  }
+},
+{
+  "model": "polls.choice",
+  "pk": 6,
+  "fields": {
+    "question": 2,
+    "choice_text": "Walking"
+  }
+},
+{
+  "model": "polls.choice",
+  "pk": 7,
+  "fields": {
+    "question": 2,
+    "choice_text": "Your own vehicle"
+  }
+},
+{
+  "model": "polls.choice",
+  "pk": 8,
+  "fields": {
+    "question": 3,
+    "choice_text": "Apple"
+  }
+},
+{
+  "model": "polls.choice",
+  "pk": 9,
+  "fields": {
+    "question": 3,
+    "choice_text": "Samsung"
+  }
+},
+{
+  "model": "polls.choice",
+  "pk": 10,
+  "fields": {
+    "question": 3,
+    "choice_text": "Huawei"
+  }
+},
+{
+  "model": "polls.choice",
+  "pk": 11,
+  "fields": {
+    "question": 3,
+    "choice_text": "Nokia"
+  }
+},
+{
+  "model": "polls.choice",
+  "pk": 12,
+  "fields": {
+    "question": 3,
+    "choice_text": "Others"
+  }
+},
+{
+  "model": "polls.choice",
+  "pk": 13,
+  "fields": {
+    "question": 2,
+    "choice_text": "Others"
+  }
+},
+{
+  "model": "polls.choice",
+  "pk": 14,
+  "fields": {
+    "question": 4,
+    "choice_text": "Bangkok Post"
+  }
+},
+{
+  "model": "polls.choice",
+  "pk": 15,
+  "fields": {
+    "question": 4,
+    "choice_text": "Khaosod"
+  }
+},
+{
+  "model": "polls.choice",
+  "pk": 16,
+  "fields": {
+    "question": 4,
+    "choice_text": "Daily News"
+  }
+},
+{
+  "model": "polls.choice",
+  "pk": 17,
+  "fields": {
+    "question": 4,
+    "choice_text": "Matichon"
+  }
+},
+{
+  "model": "polls.choice",
+  "pk": 18,
+  "fields": {
+    "question": 4,
+    "choice_text": "Thairath"
+  }
+},
+{
+  "model": "polls.choice",
+  "pk": 19,
+  "fields": {
+    "question": 4,
+    "choice_text": "Others"
+  }
+},
+{
+  "model": "polls.choice",
+  "pk": 20,
+  "fields": {
+    "question": 5,
+    "choice_text": "<100 Baht"
+  }
+},
+{
+  "model": "polls.choice",
+  "pk": 21,
+  "fields": {
+    "question": 5,
+    "choice_text": ">100 Baht"
+  }
+},
+{
+  "model": "polls.vote",
+  "pk": 17,
+  "fields": {
+    "user": 2,
+    "choice": 5
+  }
+},
+{
+  "model": "polls.vote",
+  "pk": 18,
+  "fields": {
+    "user": 1,
+    "choice": 15
+  }
+},
+{
+  "model": "polls.vote",
+  "pk": 34,
+  "fields": {
+    "user": 3,
+    "choice": 10
+  }
+},
+{
+  "model": "polls.vote",
+  "pk": 52,
+  "fields": {
+    "user": 3,
+    "choice": 15
+  }
+},
+{
+  "model": "polls.vote",
+  "pk": 66,
+  "fields": {
+    "user": 2,
+    "choice": 15
+  }
+},
+{
+  "model": "polls.vote",
+  "pk": 67,
+  "fields": {
+    "user": 4,
+    "choice": 5
+  }
+},
+{
+  "model": "polls.vote",
+  "pk": 68,
+  "fields": {
+    "user": 4,
+    "choice": 17
+  }
+},
+{
+  "model": "polls.vote",
+  "pk": 71,
+  "fields": {
+    "user": 3,
+    "choice": 6
+  }
+},
+{
+  "model": "polls.vote",
+  "pk": 76,
+  "fields": {
+    "user": 4,
+    "choice": 11
+  }
+},
+{
+  "model": "polls.vote",
+  "pk": 77,
+  "fields": {
+    "user": 2,
+    "choice": 8
+  }
+}
+]
