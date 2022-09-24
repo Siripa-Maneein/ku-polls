@@ -47,12 +47,17 @@ python manage.py loaddata data/polls.json data/users.json
 
 
 ## How to run
-1. Run the below command in your cloned directory
+1. Make sure to activate virtual environment 
+```
+. env/bin/activate
+```
+
+2. Run the below command in your cloned directory
 ```
 python manage.py runserver
 ```
 
-2. Visit the following url
+3. Visit the following url
 ```
 http://localhost:8000/polls/
 ```
