@@ -1,4 +1,6 @@
 # ku-polls
+![Unittest Workflow](https://github.com/Siripa-Maneein/ku-polls/actions/workflows/python-app.yml/badge.svg)
+[![codecov](https://codecov.io/gh/Siripa-Maneein/ku-polls/branch/main/graph/badge.svg?token=WL8RY9E0ZA)](https://codecov.io/gh/Siripa-Maneein/ku-polls)
 
 ## What ku-polls does
 An application for conducting online polls and surveys based
