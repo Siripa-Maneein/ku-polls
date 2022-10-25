@@ -11,6 +11,7 @@ from .models import Question, Choice, Vote
 
 
 def get_voted_choice(question, user):
+    """Get a choice from the question that the user already voted."""
     try:
         return Vote.objects.get(choice__question=question, user=user).choice
     except Vote.DoesNotExist:
