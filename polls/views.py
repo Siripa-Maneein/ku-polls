@@ -10,6 +10,10 @@ from django.contrib.auth.decorators import login_required
 from .models import Question, Choice, Vote
 
 
+def get_voted_choice(question, user):
+    return Vote.objects.get(choice__question=question, user=user).choice
+
+
 class BaseIndexView(generic.DetailView):
     """A class representing a view for base url."""
 
@@ -49,7 +53,7 @@ class DetailView(generic.DetailView):
             if request.user.is_authenticated:
                 return render(request, 'polls/detail.html', {
                     'question': question,
-                    'voted_choice': question.get_voted_choice(request.user)
+                    'voted_choice': get_voted_choice(question, request.user)
                 })
             else:
                 return render(request, 'polls/detail.html', {
@@ -84,7 +88,7 @@ def vote(request, question_id):
             messages.error(request, "‼️ You didn't select a choice.")
         return render(request, 'polls/detail.html', {
             'question': question,
-            'voted_choice': question.get_voted_choice(user)
+            'voted_choice': get_voted_choice(question, user)
         })
     else:
         # user already vote this choice
@@ -92,11 +96,11 @@ def vote(request, question_id):
             messages.error(request, "‼️ You have already voted this choice.")
             return render(request, 'polls/detail.html', {
                 'question': question,
-                'voted_choice': question.get_voted_choice(user)
+                'voted_choice': get_voted_choice(question, user)
             })
         # user change choice from the same question
         elif Vote.objects.filter(user=user, choice__question=question).exists():
-            old_choice = question.get_voted_choice(user)
+            old_choice = get_voted_choice(question, user)
             old_choice.vote_set.filter(user=user).delete()
             old_choice.save()
             messages.success(request, f"✅ Your choice was successfully changed from "
