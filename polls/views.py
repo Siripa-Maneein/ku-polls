@@ -107,5 +107,4 @@ def vote(request, question_id):
             messages.success(request, "✅ Your choice was successfully recorded. Thank you.")
         # create new vote and update number of votes for selected choice
         Vote.objects.create(user=user, choice=selected_choice)
-        selected_choice.save()
     return HttpResponseRedirect(reverse('polls:results', args=(question.id,)))
