@@ -8,6 +8,8 @@ import django.test
 from django.urls import reverse
 from django.contrib.auth.models import User
 from .models import Question, Choice
+from .views import get_voted_choice
+from django.contrib.auth import authenticate
 
 
 class QuestionModelTests(TestCase):
@@ -311,3 +313,26 @@ class UserAuthTest(django.test.TestCase):
         self.assertEqual(response.status_code, 302)  # could be 303
         login_with_next = f"{reverse('login')}?next={vote_url}"
         self.assertRedirects(response, login_with_next)
+
+    def test_auth_vote(self):
+        """
+        As an authenticated user, when I submitted a vote,
+        I can get my previous voted choice.
+        """
+        # user logins
+        login_url = reverse("login")
+        response = self.client.get(login_url)
+        self.assertEqual(200, response.status_code)
+        form_data = {"username": "testuser",
+                     "password": "FatChance!"
+                     }
+        response = self.client.post(login_url, form_data)
+        self.assertEqual(302, response.status_code)
+
+        # user vote first choice
+        vote_url = reverse('polls:vote', args=[self.question.id])
+        choice = self.question.choice_set.first()
+        form_data = {"choice": f"{choice.id}"}
+        response = self.client.post(vote_url, form_data)
+        # the function get_voted_choice() return the voted choice
+        self.assertEqual(choice, get_voted_choice(user=self.user1, question=self.question))
