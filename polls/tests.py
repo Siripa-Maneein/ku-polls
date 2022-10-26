@@ -343,4 +343,3 @@ class UserAuthTest(django.test.TestCase):
         response = self.client.post(vote_url, form_data)
         # the function get_voted_choice() return the new voted choice
         self.assertEqual(choice, get_voted_choice(user=self.user1, question=self.question))
-
