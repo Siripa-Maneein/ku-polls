@@ -9,7 +9,6 @@ from django.urls import reverse
 from django.contrib.auth.models import User
 from .models import Question, Choice
 from .views import get_voted_choice
-from django.contrib.auth import authenticate
 
 
 class QuestionModelTests(TestCase):
@@ -336,3 +335,12 @@ class UserAuthTest(django.test.TestCase):
         response = self.client.post(vote_url, form_data)
         # the function get_voted_choice() return the voted choice
         self.assertEqual(choice, get_voted_choice(user=self.user1, question=self.question))
+
+        # user change choice
+        vote_url = reverse('polls:vote', args=[self.question.id])
+        choice = self.question.choice_set.all()[1]
+        form_data = {"choice": f"{choice.id}"}
+        response = self.client.post(vote_url, form_data)
+        # the function get_voted_choice() return the new voted choice
+        self.assertEqual(choice, get_voted_choice(user=self.user1, question=self.question))
+
