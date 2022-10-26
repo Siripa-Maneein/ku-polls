@@ -37,13 +37,6 @@ class Question(models.Model):
         return self.is_published() and ((self.end_date is None)
                                         or (timezone.now() <= self.end_date))
 
-    def get_voted_choice(self, user):
-        """Get the choice that is already voted."""
-        for choice in self.choice_set.all():
-            if Vote.objects.filter(choice=choice, user=user).exists():
-                return choice
-        return None
-
 
 class Choice(models.Model):
     """A Choice class creates choices for Question."""
